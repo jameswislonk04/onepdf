@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>One PDF - Everything You Need for PDFs, in One Place</title>
+  <meta name="description" content="All-in-one document processing platform. Merge, split, compress, convert, edit, secure, and convert Jupyter notebooks (.ipynb) to PDF with zero hassle." />
+  
+  <!-- Favicon / Web App Manifest -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/tools.css" />
+  <link rel="stylesheet" href="css/ipynb-viewer.css" />
+
+  <!-- Instant Theme Initializer (Prevents FOUC) -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem("onepdf-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var activeTheme = savedTheme || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", activeTheme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+
+  <!-- External Client Libraries (pdf-lib, pdf.js, marked, prism, html2pdf, tesseract) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="logo-icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+        </div>
+        <div class="logo-text-group">
+          <span class="logo-title">ONE PDF</span>
+          <span class="logo-badge">All-in-One Utility</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#all" class="nav-link" data-nav-cat="all">All Tools</a>
+        <a href="#organize" class="nav-link" data-nav-cat="organize">Organize</a>
+        <a href="#optimize" class="nav-link" data-nav-cat="optimize">Optimize</a>
+        <a href="#convert-to" class="nav-link" data-nav-cat="convert-to">Convert to PDF</a>
+        <a href="#convert-from" class="nav-link" data-nav-cat="convert-from">Convert from PDF</a>
+        <a href="#security" class="nav-link" data-nav-cat="security">Security</a>
+        <a href="#edit" class="nav-link" data-nav-cat="edit">Edit</a>
+        <a href="#ai" class="nav-link" data-nav-cat="ai">AI Intelligence</a>
+        <a href="#dev" class="nav-link badge-link" data-nav-cat="dev">IPYNB & Code <span>⭐</span></a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle Switch (☀️ / 🌙) -->
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark mode" title="Switch between Light and Dark mode">
+          <span class="theme-icon sun-icon" aria-hidden="true">☀️</span>
+          <span class="theme-icon moon-icon" aria-hidden="true">🌙</span>
+        </button>
+
+        <a href="#toolsBrowserSection" class="btn btn-primary header-explore-btn" id="headerExploreBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span class="btn-text-full">Explore Tools</span>
+          <span class="btn-text-short">Explore</span>
+        </a>
+        <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main>
+    <section class="hero-section">
+      <!-- Animated Subtle Background (Canvas, Dots, Glow, Floating Orbs) -->
+      <div class="hero-bg-canvas" aria-hidden="true">
+        <div class="hero-grid-dots"></div>
+        <div class="hero-glow-bg"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+      </div>
+
+      <div class="container hero-content">
+        <!-- 1. Small Animated Badge (Stagger 0.0s) -->
+        <div class="hero-pill-badge hero-animate-badge" id="heroBadge">
+          <span class="spark-dot"></span>
+          <span>Next-Gen Document Workspace</span>
+        </div>
+
+        <!-- 2. Main Heading (Stagger 0.15s) with Gentle Gradient Glow -->
+        <h1 class="hero-title hero-animate-title">
+          Everything You Need for PDFs,<br />
+          <span class="highlight hero-title-highlight">in One Place.</span>
+        </h1>
+
+        <!-- 3. Short Description (Stagger 0.30s) -->
+        <div class="hero-description-group hero-animate-desc">
+          <p class="hero-description">
+            Merge, split, compress, convert, edit, secure, and transform your documents with powerful PDF tools.
+          </p>
+        </div>
+        
+        <!-- 4. CTA Buttons (Stagger 0.45s) -->
+        <div class="hero-cta-group hero-animate-buttons">
+          <button type="button" class="btn btn-primary hero-btn-explore" id="exploreAllToolsBtn">
+            Explore All Tools &darr;
+          </button>
+          <a href="/ipynb-to-pdf" class="btn btn-outline hero-btn-ipynb" id="heroTryIpynbBtn">
+            ⭐ Try IPYNB to PDF
+          </a>
+        </div>
+
+        <!-- 5. One PDF Workspace Visual Showcase (Stagger 0.60s - No file upload) -->
+        <div class="hero-workspace-visual hero-animate-workspace" id="heroWorkspaceShowcase">
+          <div class="workspace-card-frame">
+            <!-- Top Bar -->
+            <div class="workspace-window-header">
+              <div class="window-controls" aria-hidden="true">
+                <span class="ctrl-dot ctrl-red"></span>
+                <span class="ctrl-dot ctrl-yellow"></span>
+                <span class="ctrl-dot ctrl-green"></span>
+              </div>
+              <div class="workspace-title-badge">ONE PDF WORKSPACE</div>
+              <div class="workspace-status-indicator" id="workspaceStatusIndicator">
+                <span class="pulse-indicator-dot dot-loading" id="workspaceStatusDot"></span>
+                <span class="status-indicator-text" id="workspaceStatusText">Loading engines...</span>
+              </div>
+            </div>
+
+            <!-- PDF Tools Category Bar Preview (Interactive) -->
+            <div class="workspace-tools-banner">
+              <span class="workspace-banner-label">PDF Tools:</span>
+              <div class="workspace-quick-tags" id="workspaceQuickTags">
+                <button type="button" class="w-tag active" data-filter-cat="organize" title="Filter by Organize">Merge</button>
+                <button type="button" class="w-tag" data-filter-cat="optimize" title="Filter by Optimize">Compress</button>
+                <button type="button" class="w-tag" data-filter-cat="convert-to" title="Filter by Convert to PDF">Convert</button>
+                <button type="button" class="w-tag" data-filter-cat="edit" title="Filter by Edit">Edit</button>
+                <button type="button" class="w-tag" data-filter-cat="security" title="Filter by Security">Security</button>
+                <button type="button" class="w-tag" data-filter-cat="dev" title="Filter by Developer & IPYNB">Developer</button>
+              </div>
+            </div>
+
+            <!-- 4 Featured Tool Cards -->
+            <div class="workspace-cards-grid">
+              <!-- Card 1: Merge PDF -->
+              <div class="w-tool-card" data-tool-id="merge-pdf" tabindex="0" role="button" aria-label="Open Merge PDF">
+                <div class="w-tool-top">
+                  <div class="w-tool-icon-wrap w-icon-merge">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="8" y="2" width="13" height="15" rx="2"></rect>
+                      <polyline points="5 8 3 8 3 22 17 22 17 20"></polyline>
+                      <line x1="14.5" y1="6" x2="14.5" y2="13"></line>
+                      <line x1="11" y1="9.5" x2="18" y2="9.5"></line>
+                    </svg>
+                  </div>
+                  <span class="w-status-pill pill-ready">✓ Ready</span>
+                </div>
+                <div class="w-tool-info">
+                  <div class="w-tool-name">Merge PDF</div>
+                  <div class="w-tool-tagline">Combine multiple files</div>
+                </div>
+              </div>
+
+              <!-- Card 2: Compress PDF -->
+              <div class="w-tool-card" data-tool-id="compress-pdf" tabindex="0" role="button" aria-label="Open Compress PDF">
+                <div class="w-tool-top">
+                  <div class="w-tool-icon-wrap w-icon-compress">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="4 14 10 14 10 20"></polyline>
+                      <polyline points="20 10 14 10 14 4"></polyline>
+                      <line x1="14" y1="10" x2="21" y2="3"></line>
+                      <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                  </div>
+                  <span class="w-status-pill pill-fast">⚡ Fast</span>
+                </div>
+                <div class="w-tool-info">
+                  <div class="w-tool-name">Compress PDF</div>
+                  <div class="w-tool-tagline">Reduce size &amp; keep quality</div>
+                </div>
+              </div>
+
+              <!-- Card 3: PDF to Word -->
+              <div class="w-tool-card" data-tool-id="pdf-to-word" tabindex="0" role="button" aria-label="Open PDF to Word">
+                <div class="w-tool-top">
+                  <div class="w-tool-icon-wrap w-icon-convert">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <span class="w-status-pill pill-ready">✓ DOCX</span>
+                </div>
+                <div class="w-tool-info">
+                  <div class="w-tool-name">PDF to Word</div>
+                  <div class="w-tool-tagline">Convert to editable doc</div>
+                </div>
+              </div>
+
+              <!-- Card 4: IPYNB to PDF ⭐ -->
+              <div class="w-tool-card w-featured-card" data-tool-id="ipynb-to-pdf" tabindex="0" role="button" aria-label="Open IPYNB to PDF flagship tool">
+                <div class="w-tool-top">
+                  <div class="w-tool-icon-wrap w-icon-ipynb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </div>
+                  <span class="w-status-pill pill-star">⭐ Featured</span>
+                </div>
+                <div class="w-tool-info">
+                  <div class="w-tool-name">IPYNB &rarr; PDF</div>
+                  <div class="w-tool-tagline">High-fidelity notebook export</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workspace Footer Info -->
+            <div class="workspace-footer-caption">
+              <span class="caption-tools-count">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <span id="heroWorkspaceToolsCount">40</span> powerful document tools
+              </span>
+              <span class="caption-hint">Click any card to launch tool &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Browser & Search Section -->
+    <section class="tools-browser-section" id="toolsBrowserSection">
+      <div class="container">
+        <!-- Search & Category Card -->
+        <div class="search-filter-card">
+          <div class="search-input-wrapper">
+            <span class="search-icon-pos">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="toolSearchInput"
+              class="search-input"
+              placeholder="Search PDF tools (e.g. 'merge', 'compress', 'ipynb', 'watermark', 'ocr')..."
+              autocomplete="off"
+            />
+            <button class="search-clear-btn" id="searchClearBtn" title="Clear search">✕</button>
+          </div>
+
+          <!-- Category Navigation Pills -->
+          <div class="category-pills-bar">
+            <button type="button" class="cat-pill active" data-category="all">All Tools</button>
+            <button type="button" class="cat-pill" data-category="organize">Organize</button>
+            <button type="button" class="cat-pill" data-category="optimize">Optimize</button>
+            <button type="button" class="cat-pill" data-category="convert-to">Convert to PDF</button>
+            <button type="button" class="cat-pill" data-category="convert-from">Convert from PDF</button>
+            <button type="button" class="cat-pill" data-category="security">Security</button>
+            <button type="button" class="cat-pill" data-category="edit">Edit</button>
+            <button type="button" class="cat-pill" data-category="ai">AI Intelligence</button>
+            <button type="button" class="cat-pill" data-category="dev">Developer & IPYNB</button>
+          </div>
+        </div>
+
+        <!-- Section Category Header -->
+        <div class="category-header-wrap">
+          <h2 class="category-heading" id="categoryHeading">All Tools</h2>
+          <span class="category-count" id="categoryCount">Loading tools...</span>
+        </div>
+
+        <!-- Tool Cards Grid -->
+        <div class="tools-grid" id="toolsGrid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Why One PDF & Privacy Section -->
+    <section class="why-onepdf-section" id="whyOnePdfSection">
+      <div class="container">
+        <div class="why-header-group">
+          <span class="why-pill-badge">TRUSTED DOCUMENT ARCHITECTURE</span>
+          <h2 class="why-main-heading">Why Professionals Choose One PDF</h2>
+          <p class="why-sub-text">
+            Engineered with strict client privacy, isolated micro-sandboxes, and publication-fidelity output.
+          </p>
+        </div>
+
+        <div class="why-features-grid">
+          <div class="why-feature-card">
+            <div class="why-icon-box w-icon-shield">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <h3 class="why-card-title">Privacy-First Processing</h3>
+            <p class="why-card-text">
+              Standard operations run directly inside your web browser. Documents never leave your device whenever supported.
+            </p>
+          </div>
+
+          <div class="why-feature-card">
+            <div class="why-icon-box w-icon-clock">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h3 class="why-card-title">5-Minute Auto-Deletion</h3>
+            <p class="why-card-text">
+              Server-side conversions operate in ephemeral sandboxes and are permanently removed automatically within 300 seconds.
+            </p>
+          </div>
+
+          <div class="why-feature-card">
+            <div class="why-icon-box w-icon-sparkle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="why-card-title">Vector Publication Quality</h3>
+            <p class="why-card-text">
+              High-resolution vector output with selectable text, preserved Matplotlib charts, and crisp typography.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Tool Workspace Modal Overlay -->
+  <div class="tool-view-overlay" id="toolModalOverlay">
+    <div class="tool-modal-container">
+      
+      <!-- Modal Header -->
+      <div class="tool-modal-header">
+        <div class="tool-header-left">
+          <div class="tool-header-icon" id="toolModalIcon"></div>
+          <div class="tool-header-info">
+            <h2 id="toolModalTitle">Merge PDF</h2>
+            <p id="toolModalDesc">Combine multiple PDF files into one single document.</p>
+          </div>
+        </div>
+        <button class="tool-modal-close" id="toolModalClose" title="Close modal">✕</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="tool-modal-body">
+        
+        <!-- Dropzone Area -->
+        <div class="tool-dropzone" id="toolDropzone">
+          <input type="file" id="toolFileInput" style="display: none;" />
+          <div class="dropzone-inner-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="dropzone-main-text">Drag & Drop Files Here</div>
+          <div class="dropzone-sub-text">or click to browse from your device</div>
+          <div class="dropzone-buttons-row">
+            <button type="button" class="btn btn-outline" onclick="document.getElementById('toolFileInput').click()">
+              Choose Files
+            </button>
+            <button type="button" class="btn-sample-file" id="sampleFileBtn">
+              ✨ Load Sample File
+            </button>
+          </div>
+        </div>
+
+        <!-- File Queue Section -->
+        <div class="file-queue-section" id="fileQueueSection" style="display: none;">
+          <div class="queue-title-row">
+            <span class="queue-title">Selected Documents</span>
+            <button type="button" class="btn-sample-file" onclick="document.getElementById('toolFileInput').click()">
+              + Add More Files
+            </button>
+          </div>
+          <div class="file-queue-list" id="fileQueueList"></div>
+        </div>
+
+        <!-- Dynamic Tool Config Panel -->
+        <div id="toolConfigPanel"></div>
+
+        <!-- Processing Progress Wrap -->
+        <div class="processing-progress-wrap" id="processingProgressWrap" style="display: none;">
+          <div class="progress-header">
+            <span id="progressStatus">Processing document...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <!-- Success Result Section -->
+        <div class="tool-result-section" id="toolResultSection">
+          <div class="result-check-icon">✓</div>
+          <h3 class="result-title">Your PDF is Ready!</h3>
+          <p class="result-desc">Your document has been processed successfully and is ready for download.</p>
+          <div class="result-actions">
+            <button type="button" class="btn btn-primary" id="resultDownloadBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download PDF
+            </button>
+            <button type="button" class="btn btn-outline" id="resultPreviewBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              Preview
+            </button>
+            <button type="button" class="btn btn-ghost" id="startAgainBtn">
+              Convert Another
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="tool-modal-footer">
+        <div class="tool-privacy-note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Privacy-First Processing: In-browser when supported; 5-minute auto-deletion on server operations. Files on your computer are never modified.</span>
+        </div>
+        <button type="button" class="btn btn-primary" id="processBtn">
+          Process Document &rarr;
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <div class="logo-brand">
+            <div class="logo-icon-wrapper" style="width: 32px; height: 32px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 18px; height: 18px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <span class="logo-title" style="font-size: 1.15rem;">ONE PDF</span>
+          </div>
+          <p class="footer-tagline">"Everything You Need for PDFs, in One Place."</p>
+          <div class="footer-privacy-box">
+            🛡️ <strong>Privacy-First Processing:</strong> Documents are processed in-browser when supported. Server-side routines run in isolated temporary sandboxes with 5-minute automatic permanent deletion. Local files on your computer are never touched or modified.
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Popular Tools</h4>
+          <ul class="footer-links">
+            <li class="footer-link-item"><a href="#organize" data-nav-cat="organize">Merge PDF</a></li>
+            <li class="footer-link-item"><a href="#organize" data-nav-cat="organize">Split PDF</a></li>
+            <li class="footer-link-item"><a href="#optimize" data-nav-cat="optimize">Compress PDF</a></li>
+            <li class="footer-link-item"><a href="#dev" data-nav-cat="dev">IPYNB to PDF ⭐</a></li>
+            <li class="footer-link-item"><a href="#security" data-nav-cat="security">Sign & Protect PDF</a></li>
+            <li class="footer-link-item"><a href="#ai" data-nav-cat="ai">AI PDF Summarizer</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-links">
+            <li class="footer-link-item"><a href="#">About One PDF</a></li>
+            <li class="footer-link-item"><a href="#">Feature Roadmap</a></li>
+            <li class="footer-link-item"><a href="#">API & Developers</a></li>
+            <li class="footer-link-item"><a href="#">Contact Support</a></li>
+            <li class="footer-link-item"><a href="#">Documentation</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Legal & Security</h4>
+          <ul class="footer-links">
+            <li class="footer-link-item"><a href="#">Privacy Policy</a></li>
+            <li class="footer-link-item"><a href="#">Terms of Service</a></li>
+            <li class="footer-link-item"><a href="#">Cookie Policy</a></li>
+            <li class="footer-link-item"><a href="#">Security Overview</a></li>
+            <li class="footer-link-item"><a href="#">GDPR Compliance</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 One PDF Platform. All rights reserved.</div>
+        <div>Engineered for speed, privacy, and precision.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/tool-registry.js"></script>
+  <script src="js/pdf-engine.js"></script>
+  <script src="js/ipynb-engine.js"></script>
+  <script src="js/ai-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

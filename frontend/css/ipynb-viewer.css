@@ -1,0 +1,327 @@
+/* ==========================================================================
+   One PDF - IPYNB Viewer & PDF Rendering Styles
+   Preserves Jupyter notebook styling, code execution prompts, and tables.
+   Supports full Light Mode and Dark Mode rendering.
+   ========================================================================== */
+
+.ipynb-notebook-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+/* Font size variants */
+.ipynb-notebook-container.font-small { font-size: 12px; }
+.ipynb-notebook-container.font-medium { font-size: 14px; }
+.ipynb-notebook-container.font-large { font-size: 16px; }
+
+/* Theme: Modern Light (Default) */
+.ipynb-notebook-container.theme-light {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+/* Theme: Dark (Integrated with global Dark Mode) */
+.ipynb-notebook-container.theme-dark,
+[data-theme="dark"] .ipynb-notebook-container {
+  background: #111827;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .onepdf-header-card {
+  background: #151d30;
+  border-color: #1e293b;
+}
+
+[data-theme="dark"] .onepdf-header-card .nb-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .onepdf-header-card .nb-badge {
+  background: #1e293b;
+  border-color: #334155;
+  color: #818cf8;
+}
+
+[data-theme="dark"] .onepdf-header-card .nb-info-bar {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .onepdf-header-card .nb-divider {
+  border-color: #1e293b;
+}
+
+/* Markdown Cells in Dark Mode */
+[data-theme="dark"] .ipynb-markdown-content {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ipynb-markdown-content h1,
+[data-theme="dark"] .ipynb-markdown-content h2,
+[data-theme="dark"] .ipynb-markdown-content h3 {
+  color: #f8fafc;
+  border-bottom-color: #1e293b;
+}
+
+[data-theme="dark"] .ipynb-markdown-cell {
+  background: #161b22;
+  color: #e2e8f0;
+  border-radius: 6px;
+}
+
+/* Code Cells in Dark Mode */
+[data-theme="dark"] .ipynb-code-box pre {
+  background: #0d1117 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] .ipynb-code-box pre code {
+  color: #e6edf3 !important;
+}
+
+/* In [n] & Out [n] Execution Accents */
+.in-prompt {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.out-prompt {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .in-prompt,
+[data-theme="dark"] .ipynb-input-group .in-prompt {
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .out-prompt,
+[data-theme="dark"] .ipynb-output-group .out-prompt {
+  color: #f87171 !important;
+}
+
+/* Stream and Plain Text Outputs in Dark Mode */
+[data-theme="dark"] .ipynb-stream-output pre,
+[data-theme="dark"] .ipynb-text-output pre {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #e6edf3;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] .ipynb-error-output pre {
+  background: #2d1215;
+  border: 1px solid #5c1d24;
+  color: #fca5a5;
+  border-radius: 4px;
+}
+
+/* Notebook Embedded Images & Figures - Preserve Original Fidelity Without Darkening */
+.ipynb-image-output {
+  margin: 8px 0;
+  padding: 6px;
+  background: white;
+  display: inline-block;
+  border-radius: 6px;
+  box-shadow: var(--shadow-xs);
+}
+
+.ipynb-image-output img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
+
+[data-theme="dark"] .ipynb-image-output {
+  background: #ffffff; /* Clean white canvas backing so dark plots/charts retain 100% original contrast */
+  border: 1px solid #30363d;
+}
+
+[data-theme="dark"] .ipynb-image-output img,
+[data-theme="dark"] .ipynb-image-output svg {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Table of Contents in Dark Mode */
+.ipynb-toc-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+[data-theme="dark"] .ipynb-toc-card {
+  background: #151d30;
+  border-color: #1e293b;
+}
+
+[data-theme="dark"] .ipynb-toc-card h3,
+[data-theme="dark"] .ipynb-toc-card .toc-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .ipynb-toc-card a {
+  color: #818cf8;
+}
+
+/* Tables (Pandas DataFrames) in Dark Mode */
+table.dataframe, table.md-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88em;
+  margin: 10px 0;
+  border: 1px solid #cbd5e1;
+  background: white;
+}
+
+table.dataframe th, table.dataframe td,
+table.md-table th, table.md-table td {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+table.dataframe th, table.md-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+}
+
+table.dataframe tr:nth-child(even),
+table.md-table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+table.dataframe tr:hover,
+table.md-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+[data-theme="dark"] table.dataframe,
+[data-theme="dark"] table.md-table {
+  background: #111827;
+  border-color: #30363d;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] table.dataframe th,
+[data-theme="dark"] table.md-table th {
+  background: #161b22;
+  color: #f8fafc;
+  border-color: #30363d;
+}
+
+[data-theme="dark"] table.dataframe td,
+[data-theme="dark"] table.md-table td {
+  border-color: #30363d;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] table.dataframe tr:nth-child(even),
+[data-theme="dark"] table.md-table tr:nth-child(even) {
+  background-color: #151d30;
+}
+
+[data-theme="dark"] table.dataframe tr:hover,
+[data-theme="dark"] table.md-table tr:hover {
+  background-color: #1e293b;
+}
+
+/* Markdown Cells */
+.ipynb-markdown-cell {
+  padding: 8px 12px;
+  line-height: 1.6;
+}
+
+.ipynb-markdown-cell h1 { font-size: 1.8em; margin: 16px 0 10px; font-weight: 800; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.ipynb-markdown-cell h2 { font-size: 1.4em; margin: 14px 0 8px; font-weight: 700; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
+.ipynb-markdown-cell h3 { font-size: 1.15em; margin: 12px 0 6px; font-weight: 600; }
+.ipynb-markdown-cell ul, .ipynb-markdown-cell ol { margin-left: 24px; margin-bottom: 10px; }
+.ipynb-markdown-cell li { margin-bottom: 4px; }
+.ipynb-markdown-cell p { margin-bottom: 8px; }
+
+/* Code Cell Input & Output */
+.ipynb-input-group, .ipynb-output-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ipynb-output-group {
+  margin-top: 6px;
+}
+
+.ipynb-prompt {
+  width: 75px;
+  min-width: 75px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-align: right;
+  padding-top: 10px;
+  user-select: none;
+}
+
+.ipynb-code-box, .ipynb-output-box {
+  flex-grow: 1;
+  overflow-x: auto;
+}
+
+.ipynb-code-box pre {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  line-height: 1.5;
+  margin: 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.ipynb-stream-output pre, .ipynb-plain-output pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  line-height: 1.4;
+  margin: 0;
+  padding: 6px 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ipynb-html-output {
+  margin: 6px 0;
+  overflow-x: auto;
+}
+
+/* Print Rules for PDF generation */
+@media print {
+  @page {
+    margin: 12mm 15mm 12mm 15mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .site-header, .site-footer, .tool-modal-header, .tool-modal-footer, .dropzone-section {
+    display: none !important;
+  }
+
+  .ipynb-cell {
+    page-break-inside: avoid !important;
+  }
+
+  .ipynb-code-box pre {
+    border-color: #d1d5db !important;
+    background: #f9fafb !important;
+  }
+}
