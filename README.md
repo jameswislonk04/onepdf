@@ -2,6 +2,10 @@
 
 > **"Everything You Need for PDFs, in One Place."**
 
+[![Deploy to GitHub Pages](https://github.com/jameswislonk04/onepdf/actions/workflows/deploy.yml/badge.svg)](https://github.com/jameswislonk04/onepdf/actions/workflows/deploy.yml)
+
+🌐 **Live Website**: [https://jameswislonk04.github.io/onepdf/](https://jameswislonk04.github.io/onepdf/)
+
 **One PDF** is a modern, privacy-first, production-grade document workspace providing 40 specialized tools across 8 categories, powered by an isolated FastAPI backend, client-side processing, and a flagship **IPYNB to PDF** converter.
 
 ---
