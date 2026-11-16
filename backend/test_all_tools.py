@@ -160,11 +160,23 @@ def test_all_backend_tools():
     assert res.headers["content-type"] == "application/pdf"
     print("  -> Report Images Album PDF OK")
 
-    print("Testing /api/pdf/from-ui...")
-    res = client.post("/api/pdf/from-ui", data={"html_content": "<html><body><h1>One PDF UI Snapshot</h1><p>Exported successfully.</p></body></html>"})
+    print("Testing /api/pdf/to-excel...")
+    res = client.post("/api/pdf/to-excel", files={"file": ("test.pdf", pdf_bytes, "application/pdf")})
+    assert res.status_code == 200, res.text
+    assert res.headers["content-type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    print("  -> PDF to Excel OK")
+
+    print("Testing /api/pdf/redact...")
+    res = client.post("/api/pdf/redact", files={"file": ("test.pdf", pdf_bytes, "application/pdf")}, data={"keywords": "Hello, computer"})
     assert res.status_code == 200, res.text
     assert res.headers["content-type"] == "application/pdf"
-    print("  -> Export UI to PDF OK")
+    print("  -> PDF Redact OK")
+
+    print("Testing /api/pdf/header-footer...")
+    res = client.post("/api/pdf/header-footer", files={"file": ("test.pdf", pdf_bytes, "application/pdf")}, data={"header_text": "Confidential • {page}/{total}", "footer_text": "One PDF"})
+    assert res.status_code == 200, res.text
+    assert res.headers["content-type"] == "application/pdf"
+    print("  -> PDF Header-Footer OK")
 
     print("\nALL BACKEND TOOLS & PDF EXPORTERS VERIFIED AND PASSING 100%!")
 
